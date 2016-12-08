@@ -1,0 +1,64 @@
+1.cloned the repository using:
+git clone git://git.savannah.gnu.org/diffutils.git
+
+2. Copied the changes into the file using:
+git log >git-log.txt
+
+3.Generated a list of tags using:
+git tag >git-tags.txt
+
+4. I used the command git log --grep="maint: quote".
+The output showed the commit was "62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f"
+
+5.Checked out the version 3.0 by:
+git checkout v3.0. Which put me in
+'detatched head state'.
+
+6. I applied the patch by using the command:
+"git show 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f > quote-patch.txt"
+and "patch -p1 < quote-patch.txt". I skipped over the files that 
+were unable to find the correct patch.
+
+7. I used "git status" to get an overview of what happened,
+It shows me all the modified and untracked files.
+
+8. I practiced the commands on other files I made. Particularly
+ "C-x v =", "C-x v u", "C-c C-a" and "C-c C-c"
+
+9. I reverted all the non-c files. Then went back and
+changed each of the files that were rejected. I made sure to 
+keep only the desired changes in each of the .c files, deleting
+all other changes.
+
+10. I opened the rejected "src/*.c.rej" files and manually copied
+the rejected patches into the corresponding c files. It seemed to be
+mostly comments.
+
+11. I removed all the untracked files with "git clean -f"
+Now "git status" only reports the six modified files.
+
+12. git status reports 6 modified files.
+I used the command "git diff > quote-3.0-patch.txt" to copy
+the outputted lines by diff to this new text file.
+
+13. I then read the README-hacking file and inputted the following:
+(before running this, I went into stdio.in.h and made the
+necessary changes from the given patch)
+1. ./bootstrap
+2  ./configure
+3. make
+4. make check
+
+ I verified that the diff command works properly by using the 
+command "./diff . -" and the outoutter result was:
+"./diff: cannot compare '-' to a directory", with single quotes.
+Also, ./diff --help and ./diff --help3 outputted with all format correct.
+
+I created the directories by running "git clone git:://git.savannah.gnu.org/diffutils.git diffutils-3.0"
+I then went into that folder and checked out version 3.0. I then went back to the upper folder
+and ran the command "./src/diff -pru diffutils-3.0/ diffutils-3.0-patch/ > quote-3.0-test.txt""
+To compare the patch to the source code.
+
+I then ran the diff command to compare quote-3.0-test.txt to quote-3.0-patch.txt. There
+are quite a few differences, and the changes are not innocous.
+

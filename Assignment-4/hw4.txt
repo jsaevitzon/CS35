@@ -1,0 +1,37 @@
+cd sI made a new branch by running the commnad 
+"git checkout v3.0 -b quote"
+
+I installed the change into this new branch by
+running "patch -p1 < quote-3.0-patch.txt"
+It patched 6 files:
+src/cmp.c
+src/diff.c
+src/diff3.c
+src/dir.c
+src/sdiff.c
+src/util.c
+I typed "y" for each promp to assume -R.
+
+
+I opened ChangeLog-2008 in emacs and added what I changed using "C-x 4-a". I noticed that, after closing emacs, what I wrote appeared in ChangeLog.
+
+I then used "git add ." and "git commit -F ChangeLog" to commit the changes.
+
+I used "git format-patch -1 --stdout > formatted-patch.txt" to generate the file formatted-patch.txt.
+
+I switched to a new branch by running "git checkout v3.0 -b test" and 
+ran the command "git am < formatted-patch.txt" to apply. Then I ran
+./bootstrap
+./configure
+make
+make check
+I then tested that the patch worked, and it did.
+
+I did the same for my partner's, Patrick's, formatted-patch.txt. And his did not work. So we
+spoke again and he is sending it to me again later.
+
+I then used "make distdir" to check the diffutils*/Changelog files and the changes were there.
+
+I went to  ~eggert/src/gnu/emacs and ran the command 'gitk'. I found the file
+date 2015-01-24 and took a screenshot. Then wrote a description.
+
