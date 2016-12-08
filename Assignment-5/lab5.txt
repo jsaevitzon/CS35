@@ -1,0 +1,62 @@
+I downloaded the file given to us and ran "tar -xzvf coreutils-wth-bug.tar" 
+to extract it. I then went into the coreutils-with-bug file and ran:
+1. ./configure
+2. make
+3. make install
+
+I had a number of errors show up, some of them including:
+
+
+In file included from utimecmp.c:41:0:
+utimens.h:2:5: error: conflicting types for 'futimens'
+ int futimens (int, char const *, struct timespec const [2]);
+     ^
+In file included from utimecmp.h:25:0,
+                 from utimecmp.c:25:
+/usr/include/sys/stat.h:373:12: note: previous declaration of 'futimens' was here
+ extern int futimens (int __fd, const struct timespec __times[2]) __THROW;
+
+The reason the errors showed up was there was a problem with conflicting names.
+So the renaming patch should handle this problem.
+
+So I downloaded the patch. I used wget to download the patch. I ran the command "patch -p0 < cor\
+eutils.diff" to apply the patch. After applying the patch, I ran:
+
+1. ./configure
+2. make
+3. make install
+
+This time it works fine. So I go into src and test ./ls and it works as expected. I make a direct\
+ory called temp and go into it. I then run the commands:
+touch -d '1910 11:00 GMT' wwi-armistice
+touch now
+sleep 1
+touch now1
+
+I run the command ../ls -lt and the output is (ignoring the first parts)
+
+2046-12-17 09:28 wwi-armistice (bug is here)
+
+2016-04-26 12:58 now1
+
+2016-04-26 12:56 now
+
+So, the bug has been reproduced. I go into src and open ls in emacs.
+I use gdb to look for what is causing the bug. I eventually stumble 
+into realizing that the issue is in timespec.h. I create a new file
+called timespecPatch.h and make the changes to that file. I then
+run the command "diff -u 'timespec.h' 'timespecPatch.h' > lab5.diff".
+I then run the patch on the original file using "patch -p2 < lab5.diff"
+
+I reconfigure, re make, and re make install.
+I go back into my temp file and test out the patch using the commands given to us. 
+"TZ=UTC0 ls -lt --full-time wwi-armistice now now1". This time it works properly.
+
+I then create a directory in src called temp (coreutils-with-bug/src/temp), and recreate
+the bug there. The bug cannot be fixed here. The reason the patch will not work here
+is that the server is automatticaly causing the overflow before the patch can fix it.
+Thus, we are not reading it in 64 bits (which I convert it to in the patch), but rather
+as 32 bits. So when creating this file, it seems as if the server reads and stores it
+as being created way in the future, rather than when testing it in a temp file where
+we are using 64 bits temporarily to circumvent this problem. Thus, the issue exists 
+before coreutils ever handles it.
