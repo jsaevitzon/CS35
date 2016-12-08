@@ -1,0 +1,17 @@
+1) If another team had access to all the bytes going across the network
+then we should still be fine. This is because all information being
+transmitted across the network is already encrypted and can only be
+decrypted by certain pgp keys. It would be virtually impossible for
+any hacker to decrypt a 256-bit encrypted text paragraph, no matter
+how long it is. This only protects throught the network though, not
+when someone has access to the computer or keyboard.
+
+If a hacker had access to a USB, this would be a different story. They
+could vry well use that to track key strokes or other activity that
+would make it easier to decipher movement. This would be much less secure.
+
+2) gpg --verify only verifies that nobody else has messed with the file
+since the person who sent it sent it. However, it cannot verify that the
+person who we believed sent it, actually sent it. Thus, anybody could have
+actually sent it, but all we can do is verify that nobody accessed it once
+it has been sent, not that the wrong person sent it.

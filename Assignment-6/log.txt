@@ -1,0 +1,46 @@
+I used the cd to boot ubuntu on the computer.
+
+Ran the command dpkg --get-selections | grep openssh install.
+The result was : 
+
+openssh-client
+
+So I ran: sudo apt-get install openssh-server to install
+the server.
+
+Then I ran the command: dpgk --get-selections | grep openssh install.
+This time the result was:
+
+openssh-client
+openssh-server
+openssh-sftp-server
+
+which is what we want.
+
+I ran the comman ssh-keygen, and created my passphrase:
+"I like to walk my dog".
+
+Then I ran: sudo useradd -d /home/client_dir to
+create a directory for my client. I cd'd to that directory
+and ran: sudo mkdir .ssh.
+
+I then added a client user by running:
+sudo useradd -d /home/client_dir -m client
+
+and created the password using:
+sudo passwd client.
+I made the password: "client".
+
+I had my partner run ifconfig to check his ip address.
+I ran:
+ssh-copy-id -i user1@10.97.85.180
+
+A window then came up prompting me to write my passphrase,
+which I did.
+
+I was then connected to my partners desktop via ssh.
+
+I opened emacs to test that it worked, and it did.
+
+We then repeated the process with my partner logging into
+my desktop.
