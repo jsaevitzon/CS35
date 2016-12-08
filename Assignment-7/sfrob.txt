@@ -1,0 +1,48 @@
+When running with 10 words
+
+time ./sfrob < test.txt
+ Comparisons: 19
+
+real          0m0.002s
+user          0m0.000s
+sys           0m0.001s
+
+time ./sfrob_old <test.txt
+
+real 0m0.007s
+user 0m0.000s
+sys  0m0.001s
+
+When running with 100 words
+
+time ./sfrob < test.txt
+Comparisons: 479
+
+real         0m0.002s
+user         0m0.000s
+sys          0m0.001s
+
+time ./sfrob_old < test.txt
+
+real 0m0.002s
+user 0m0.000s
+sys  0m0.001s
+
+When running with 1000 words
+
+time ./sfrob < test.txt
+Comparisons: 7874
+
+real         0m0.007s
+user         0m0.000s
+sys          0m0.006s
+
+
+time ./sfrob_old < test.txt
+real         0m0.002s
+user         0m0.000s
+sys          0m0.001s
+
+I plugged the number of comparisons for many values into
+excel and it gave me a regression analysis of
+time = -18 + 3.762*words.

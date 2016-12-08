@@ -1,0 +1,130 @@
+tr2b: Uses buffered input. Uses getchar() and putchar().  Checks that there are
+two arguments, strings of equal length, otherwise exits with 0.  I create a
+pointer to the beginning of each argument.  While there are still being numbers
+read, the function reads each char, if the char is located in the first string,
+it changes it to the corresponding char in the second string. It then outputs
+the changed char.
+
+
+tr2u: Uses unbuffered. It does essentially the same thing as tr2b.  The only
+difference is that instead of getchar() and putchar(), it uses read() and
+write().
+
+
+3.  I used a random text file which a created using the command "head
+--bytes=500000 /dev/urandom > rand.txt"
+
+
+
+This is the table outputted when calling "strace -c ./tr2b 'efgh''abcd' < rand.txt'
+This is to the terminal.
+
+s/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 95.67    0.004901           2      2029           write
+  1.44    0.000074           7        10           read
+  0.98    0.000050           6         9           mmap
+  0.51    0.000026           7         4           mprotect
+  0.35    0.000018           5         4           fstat
+  0.27    0.000014           7         2           open
+  0.20    0.000010          10         1           munmap
+  0.14    0.000007           4         2           close
+  0.14    0.000007           7         1         1 access
+  0.14    0.000007           7         1           execve
+  0.10    0.000005           5         1           brk
+  0.08    0.000004           4         1           arch_prctl
+  ------ ----------- ----------- --------- --------- ----------------
+ 100.00    0.005123                  2065         1 total
+		       
+
+This is the table outputted when calling "strace -c ./tr2b 'efgh' 'abcd' <rand.txt > tes.txt"
+This is to a file.
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 28.78    0.000080          10         8           write
+ 18.35    0.000051           6         9           mmap
+ 17.63    0.000049           5        10           read
+  9.71    0.000027           7         4           mprotect
+  6.47    0.000018           5         4           fstat
+  5.04    0.000014           7         2           open
+  3.60    0.000010          10         1           munmap
+  2.88    0.000008           4         2           close
+  2.52    0.000007           7         1         1 access
+  2.52    0.000007           7         1           execve
+  1.44    0.000004           4         1           brk
+  1.08    0.000003           3         1           arch_prctl
+  ------ ----------- ----------- --------- --------- -----------
+100.00    0.000278                    44         1 total
+
+
+This is the table outputted when calling "strace -c ./tr2u 'efgh' 'abcd' < rand.txt'
+
+s/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 57.75    0.646276           1    500000           write
+ 42.24    0.472691           1    500002           read
+  0.00    0.000041           6         7           mmap
+  0.00    0.000028           7         4           mprotect
+  0.00    0.000014           7         2           op
+  0.00    0.000010          10         1           munmap
+  0.00    0.000008           4         2           close
+  0.00    0.000008           4         2           fstat
+  0.00    0.000008           8         1         1 access
+  0.00    0.000007           7         1           execve
+  0.00    0.000004           4         1           brk
+  0.00    0.000004           4         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    1.119099               1000024         1 total
+
+This is the table outputted when calling "strace -c ./tr2u 'efgh' 'abcd' <rand.txt > test.txt"
+This is to a file
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 56.26    0.576853           1    500000           write
+ 43.73    0.448352           1    500002           read
+  0.00    0.000046           7         7           mmap
+  0.00    0.000035           9         4           mprotect
+  0.00    0.000016          16         1           execve
+  0.00    0.000015           8         2           open
+  0.00    0.000011          11         1           munmap
+  0.00    0.000008           4         2           close
+  0.00    0.000008           4         2           fstat
+  0.00    0.000007           7         1         1 access
+  0.00    0.000004           4         1           brk
+  0.00    0.000004           4         1           arch_prctl
+  ------ ----------- ----------- --------- --------- ----------------
+100.00    1.025359               1000024         1 total
+
+4.
+
+When running "time ./tr2b 'abcde' 'fghij' < rand.txt" with a randomly generated
+file using the command "head --bytes=500000 /dev/urandom > rand.txt". The output
+is:
+This is time to terminal:
+
+real 0m0.031s
+user 0m0.012s
+sys 0m0.012s
+
+When running the same command using ./tr2u, I get:
+This is time to terminal:
+
+real 0m0.542s
+user 0m0.039s
+sys  0m0.494s
+
+
+When running "time ./tr2b 'abcde' 'fghij' < rand.txt > test.txt" with the same
+files as above, This is the time output:
+
+real  0m0.033s
+user  0m0.015s
+sys   0m0.001s
+
+When running the same as above, except with tr2u, I get:
+
+real 0m0.615s
+user 0m0.030s
+sys  0m0.577s
