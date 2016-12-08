@@ -1,0 +1,251 @@
+I used the standard library <math.h> in my function
+to compute cos(.5). I also used the standard library <stdio.h>
+so I could use printf.
+
+
+2.
+After compiling with the command "gcc trivial.c -o trivial",
+I ran the executable trivial with the instruction ldd
+"ldd ./trivial". The output was:
+
+linux-vdso.so.1 =>  (0x00007fff81f73000)
+libc.so.6 => /lib64/libc.so.6 (0x00007f77822c5000)
+/lib64/ld-linux-x86-64.so.2 (0x00007f77826ab000)
+
+
+3.
+
+I used strace ./trivial to see which calls are related to
+dynamic linking. The following 3 are related to dynamic
+linking. There are 2 opens and 1 access (which failed?)
+
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+open("/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+
+4.
+When I run the command "ls /usr/bin | awk 'NR%101==004255295%101'"
+I get the output:
+
+akonadiserver
+cairo-sphinx
+cpan
+dircolors
+extresso
+gftopk
+gslp
+hunzip
+jar
+kjs
+ldns-rrsig
+mailx
+nepomukbackup
+osinfo-db-validate
+phar.phar
+printf
+repoclosure
+setfont
+stap-report
+testparm
+vacuumdb
+xkill
+zsoelim
+
+I go through each command invoking "ldd /usr/bin/[name]"
+
+cpan: not a dynamic executable
+extresso: not a dynamic executable
+gslp: not a dynamic executable
+phar.phar: not a dynamic executable
+repoclosure: not a dynamic executable
+stap-report: not a dynamic executable
+
+No other errors.
+
+
+6.
+
+	/lib64/ld-linux-x86-64.so.2 
+	libacl.so.1 => /lib64/libacl.so.1 
+	libakonadiprotocolinternals.so.1 => /lib64/libakonadiprotocolinternals.so.1 
+	libasn1util-samba4.so => /usr/lib64/samba/libasn1util-samba4.so 
+	libattica.so.0.4 => /lib64/libattica.so.0.4 
+	libattr.so.1 => /lib64/libattr.so.1 
+	libauthkrb5-samba4.so => /usr/lib64/samba/libauthkrb5-samba4.so 
+	libauth-sam-reply-samba4.so => /usr/lib64/samba/libauth-sam-reply-samba4.so 
+	libboost_program_options-mt.so.1.53.0 => /lib64/libboost_program_options-mt.so.1.53.0 
+	libbz2.so.1 => /lib64/libbz2.so.1 
+	libcairo-script-interpreter.so.2 => /lib64/libcairo-script-interpreter.so.2 
+	libcairo.so.2 => /lib64/libcairo.so.2 
+	libcap.so.2 => /lib64/libcap.so.2 
+	libccan-samba4.so => /usr/lib64/samba/libccan-samba4.so 
+	libCHARSET3-samba4.so => /usr/lib64/samba/libCHARSET3-samba4.so 
+	libcliauth-samba4.so => /usr/lib64/samba/libcliauth-samba4.so 
+	libcli-ldap-common-samba4.so => /usr/lib64/samba/libcli-ldap-common-samba4.so 
+	libcli-smb-common-samba4.so => /usr/lib64/samba/libcli-smb-common-samba4.so 
+	libcom_err.so.2 => /lib64/libcom_err.so.2 
+	libcrypto.so.10 => /lib64/libcrypto.so.10 
+	libcrypt.so.1 => /lib64/libcrypt.so.1 
+	libc.so.6 => /lib64/libc.so.6 
+	libdbus-1.so.3 => /lib64/libdbus-1.so.3 
+	libdbusmenu-qt.so.2 => /lib64/libdbusmenu-qt.so.2 
+	libdbwrap-samba4.so => /usr/lib64/samba/libdbwrap-samba4.so 
+	libdl.so.2 => /lib64/libdl.so.2 
+	libdrm.so.2 => /lib64/libdrm.so.2 
+	libdw.so.1 => /lib64/libdw.so.1 
+	libEGL.so.1 => /lib64/libEGL.so.1 
+	libelf.so.1 => /lib64/libelf.so.1 
+	liberrors-samba4.so => /usr/lib64/samba/liberrors-samba4.so 
+	libexpat.so.1 => /lib64/libexpat.so.1 
+	libfam.so.0 => /lib64/libfam.so.0 
+	libffi.so.6 => /lib64/libffi.so.6 
+	libflag-mapping-samba4.so => /usr/lib64/samba/libflag-mapping-samba4.so 
+	libfontconfig.so.1 => /lib64/libfontconfig.so.1 
+	libfreebl3.so => /lib64/libfreebl3.so 
+	libfreetype.so.6 => /lib64/libfreetype.so.6 
+	libgbm.so.1 => /lib64/libgbm.so.1 
+	libgcc_s.so.1 => /lib64/libgcc_s.so.1 
+	libgensec.so.0 => /lib64/libgensec.so.0 
+	libgio-2.0.so.0 => /lib64/libgio-2.0.so.0 
+	libglapi.so.0 => /lib64/libglapi.so.0 
+	libglib-2.0.so.0 => /lib64/libglib-2.0.so.0 
+	libGL.so.1 => /lib64/libGL.so.1 
+	libgmodule-2.0.so.0 => /lib64/libgmodule-2.0.so.0 
+	libgobject-2.0.so.0 => /lib64/libgobject-2.0.so.0 
+	libgssapi_krb5.so.2 => /lib64/libgssapi_krb5.so.2 
+	libgthread-2.0.so.0 => /lib64/libgthread-2.0.so.0 
+	libhunspell-1.3.so.0 => /lib64/libhunspell-1.3.so.0 
+	libICE.so.6 => /lib64/libICE.so.6 
+	libinterfaces-samba4.so => /usr/lib64/samba/libinterfaces-samba4.so 
+	libjli.so => /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.95-2.6.4.0.el7_2.x86_64/jre/lib/amd64/jli/libjli.so 
+	libk5crypto.so.3 => /lib64/libk5crypto.so.3 
+	libkdecore.so.5 => /lib64/libkdecore.so.5 
+	libkdeui.so.5 => /lib64/libkdeui.so.5 
+	libkeyutils.so.1 => /lib64/libkeyutils.so.1 
+	libkio.so.5 => /lib64/libkio.so.5 
+	libkjs.so.4 => /lib64/libkjs.so.4 
+	libkpathsea.so.6 => /lib64/libkpathsea.so.6 
+	libkrb5samba-samba4.so => /usr/lib64/samba/libkrb5samba-samba4.so 
+	libkrb5.so.3 => /lib64/libkrb5.so.3 
+	libkrb5support.so.0 => /lib64/libkrb5support.so.0 
+	liblber-2.4.so.2 => /lib64/liblber-2.4.so.2 
+	libldap-2.4.so.2 => /lib64/libldap-2.4.so.2 
+	libldap_r-2.4.so.2 => /lib64/libldap_r-2.4.so.2 
+	libldbsamba-samba4.so => /usr/lib64/samba/libldbsamba-samba4.so 
+	libldb.so.1 => /lib64/libldb.so.1 
+	libldns.so.1 => /lib64/libldns.so.1 
+	liblzma.so.5 => /lib64/liblzma.so.5 
+	libm.so.6 => /lib64/libm.so.6 
+	libndr-krb5pac.so.0 => /lib64/libndr-krb5pac.so.0 
+	libndr-nbt.so.0 => /lib64/libndr-nbt.so.0 
+	libndr-samba-samba4.so => /usr/lib64/samba/libndr-samba-samba4.so 
+	libndr.so.0 => /lib64/libndr.so.0 
+	libndr-standard.so.0 => /lib64/libndr-standard.so.0 
+	libnepomukcore.so.4 => /lib64/libnepomukcore.so.4 
+	libnepomukquery.so.4 => /lib64/libnepomukquery.so.4 
+	libnepomuk.so.4 => /lib64/libnepomuk.so.4 
+	libnepomukutils.so.4 => /lib64/libnepomukutils.so.4 
+	libnsl.so.1 => /lib64/libnsl.so.1 
+	libnspr4.so => /lib64/libnspr4.so 
+	libnss3.so => /lib64/libnss3.so 
+	libnssutil3.so => /lib64/libnssutil3.so 
+	libntdb.so.1 => /usr/lib64/samba/libntdb.so.1 
+	libosinfo-1.0.so.0 => /lib64/libosinfo-1.0.so.0 
+	libpcap.so.1 => /lib64/libpcap.so.1 
+	libpcreposix.so.0 => /lib64/libpcreposix.so.0 
+	libpcre.so.1 => /lib64/libpcre.so.1 
+	libpixman-1.so.0 => /lib64/libpixman-1.so.0 
+	libplc4.so => /lib64/libplc4.so 
+	libplds4.so => /lib64/libplds4.so 
+	libpng15.so.15 => /lib64/libpng15.so.15 
+	libpopt-samba3-samba4.so => /usr/lib64/samba/libpopt-samba3-samba4.so 
+	libpopt.so.0 => /lib64/libpopt.so.0 
+	libpq.so.5 => /lib64/libpq.so.5 
+	libpthread.so.0 => /lib64/libpthread.so.0 
+	libqca.so.2 => /lib64/libqca.so.2 
+	libQtCore.so.4 => /lib64/libQtCore.so.4 
+	libQtDBus.so.4 => /lib64/libQtDBus.so.4 
+	libQtGui.so.4 => /lib64/libQtGui.so.4 
+	libQtNetwork.so.4 => /lib64/libQtNetwork.so.4 
+	libQtSql.so.4 => /lib64/libQtSql.so.4 
+	libQtSvg.so.4 => /lib64/libQtSvg.so.4 
+	libQtXml.so.4 => /lib64/libQtXml.so.4 
+	libreplace-samba4.so => /usr/lib64/samba/libreplace-samba4.so 
+	libresolv.so.2 => /lib64/libresolv.so.2 
+	librt.so.1 => /lib64/librt.so.1 
+	libsamba3-util-samba4.so => /usr/lib64/samba/libsamba3-util-samba4.so 
+	libsamba-cluster-support-samba4.so => /usr/lib64/samba/libsamba-cluster-support-samba4.so 
+	libsamba-credentials.so.0 => /lib64/libsamba-credentials.so.0 
+	libsamba-debug-samba4.so => /usr/lib64/samba/libsamba-debug-samba4.so 
+	libsamba-hostconfig.so.0 => /lib64/libsamba-hostconfig.so.0 
+	libsamba-modules-samba4.so => /usr/lib64/samba/libsamba-modules-samba4.so 
+	libsamba-security-samba4.so => /usr/lib64/samba/libsamba-security-samba4.so 
+	libsamba-sockets-samba4.so => /usr/lib64/samba/libsamba-sockets-samba4.so 
+	libsamba-util.so.0 => /lib64/libsamba-util.so.0 
+	libsamdb-common-samba4.so => /usr/lib64/samba/libsamdb-common-samba4.so 
+	libsamdb.so.0 => /lib64/libsamdb.so.0 
+	libsasl2.so.3 => /lib64/libsasl2.so.3 
+	libsecrets3-samba4.so => /usr/lib64/samba/libsecrets3-samba4.so 
+	libselinux.so.1 => /lib64/libselinux.so.1 
+	libserver-role-samba4.so => /usr/lib64/samba/libserver-role-samba4.so 
+	libsmbconf.so.0 => /lib64/libsmbconf.so.0 
+	libsmbd-shim-samba4.so => /usr/lib64/samba/libsmbd-shim-samba4.so 
+	libsmbregistry-samba4.so => /usr/lib64/samba/libsmbregistry-samba4.so 
+	libsmb-transport-samba4.so => /usr/lib64/samba/libsmb-transport-samba4.so 
+	libsmime3.so => /lib64/libsmime3.so 
+	libSM.so.6 => /lib64/libSM.so.6 
+	libsocket-blocking-samba4.so => /usr/lib64/samba/libsocket-blocking-samba4.so 
+	libsolid.so.4 => /lib64/libsolid.so.4 
+	libsopranoclient.so.1 => /lib64/libsopranoclient.so.1 
+	libsoprano.so.4 => /lib64/libsoprano.so.4 
+	libssl3.so => /lib64/libssl3.so 
+	libssl.so.10 => /lib64/libssl.so.10 
+	libstdc++.so.6 => /lib64/libstdc++.so.6 
+	libstreamanalyzer.so.0 => /lib64/libstreamanalyzer.so.0 
+	libstreams.so.0 => /lib64/libstreams.so.0 
+	libsystemd-daemon.so.0 => /lib64/libsystemd-daemon.so.0 
+	libtalloc.so.2 => /lib64/libtalloc.so.2 
+	libtdb.so.1 => /lib64/libtdb.so.1 
+	libtdb-wrap-samba4.so => /usr/lib64/samba/libtdb-wrap-samba4.so 
+	libtevent.so.0 => /lib64/libtevent.so.0 
+	libtevent-util.so.0 => /lib64/libtevent-util.so.0 
+	libudev.so.1 => /lib64/libudev.so.1 
+	libutil-cmdline-samba4.so => /usr/lib64/samba/libutil-cmdline-samba4.so 
+	libutil-ntdb-samba4.so => /usr/lib64/samba/libutil-ntdb-samba4.so 
+	libutil-reg-samba4.so => /usr/lib64/samba/libutil-reg-samba4.so 
+	libutil-setid-samba4.so => /usr/lib64/samba/libutil-setid-samba4.so 
+	libutil-tdb-samba4.so => /usr/lib64/samba/libutil-tdb-samba4.so 
+	libuuid.so.1 => /lib64/libuuid.so.1 
+	libX11.so.6 => /lib64/libX11.so.6 
+	libX11-xcb.so.1 => /lib64/libX11-xcb.so.1 
+	libXau.so.6 => /lib64/libXau.so.6 
+	libxcb-dri2.so.0 => /lib64/libxcb-dri2.so.0 
+	libxcb-dri3.so.0 => /lib64/libxcb-dri3.so.0 
+	libxcb-glx.so.0 => /lib64/libxcb-glx.so.0 
+	libxcb-present.so.0 => /lib64/libxcb-present.so.0 
+	libxcb-randr.so.0 => /lib64/libxcb-randr.so.0 
+	libxcb-render.so.0 => /lib64/libxcb-render.so.0 
+	libxcb-shape.so.0 => /lib64/libxcb-shape.so.0 
+	libxcb-shm.so.0 => /lib64/libxcb-shm.so.0 
+	libxcb.so.1 => /lib64/libxcb.so.1 
+	libxcb-sync.so.1 => /lib64/libxcb-sync.so.1 
+	libxcb-xfixes.so.0 => /lib64/libxcb-xfixes.so.0 
+	libXcursor.so.1 => /lib64/libXcursor.so.1 
+	libXdamage.so.1 => /lib64/libXdamage.so.1 
+	libXext.so.6 => /lib64/libXext.so.6 
+	libXfixes.so.3 => /lib64/libXfixes.so.3 
+	libXft.so.2 => /lib64/libXft.so.2 
+	libXinerama.so.1 => /lib64/libXinerama.so.1 
+	libXi.so.6 => /lib64/libXi.so.6 
+	libxml2.so.2 => /lib64/libxml2.so.2 
+	libXmuu.so.1 => /lib64/libXmuu.so.1 
+	libXpm.so.4 => /lib64/libXpm.so.4 
+	libXrandr.so.2 => /lib64/libXrandr.so.2 
+	libXrender.so.1 => /lib64/libXrender.so.1 
+	libxshmfence.so.1 => /lib64/libxshmfence.so.1 
+	libxslt.so.1 => /lib64/libxslt.so.1 
+	libXtst.so.6 => /lib64/libXtst.so.6 
+	libXxf86vm.so.1 => /lib64/libXxf86vm.so.1 
+	libz.so.1 => /lib64/libz.so.1 
+	linux-vdso.so.1 =>  
+
